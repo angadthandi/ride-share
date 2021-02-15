@@ -2,6 +2,7 @@
 
 ## Entities:
 
+- RquestHandler
 - RideType
 - Passenger
 - Driver
@@ -23,7 +24,10 @@
 - RideType RIDETYPE
 - Driver DRIVER
 - Passenger PASSENGER
-- CreatedDate DATETIME
+
+### RequestHandler
+- DriverCount INT
+- Passenger PASSENGER
 
 --------------------------------------
 
