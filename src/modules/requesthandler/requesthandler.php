@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ "/../ridestatus/ridestatus.php";
-require_once __DIR__ "/../driver/driver.php";
-require_once __DIR__ "/../passenger/passenger.php";
-require_once __DIR__ "/../ride/ride.php";
+require_once __DIR__ . "/../ridestatus/ridestatus.php";
+require_once __DIR__ . "/../driver/driver.php";
+require_once __DIR__ . "/../passenger/passenger.php";
+require_once __DIR__ . "/../ride/ride.php";
 
 class RequestHandler {
 
@@ -23,30 +23,32 @@ class RequestHandler {
         int $origin,
         int $destination,
         int $numOfSeats
-    ): void {
+    ): bool {
         // driver available
         if ($this->driverCount <= 0) {
             error_log("no drivers available");
-            return;
+            return false;
         }
 
         // find driver
         $currDriver = $this->_getCurrentDriver($driverID);
-        if (empty($currDriver)) { return; }
+        if (empty($currDriver)) { return false; }
 
         // find passenger
         $currPassenger = $this->_getCurrentPassenger($passengerID);
-        if (empty($currPassenger)) { return; }
+        if (empty($currPassenger)) { return false; }
 
         $this->driverCount -= 1;
 
         $currPassenger->createRide($origin, $destination, $numOfSeats);
+
+        return true;
     }
 
     public function completeRide(int $passengerID): int {
         // find passenger
         $currPassenger = $this->_getCurrentPassenger($passengerID);
-        if (empty($currPassenger)) { return; }
+        if (empty($currPassenger)) { return 0; }
 
         $this->driverCount += 1;
 
@@ -66,10 +68,10 @@ class RequestHandler {
 
     // Private methods -----------------------------------------------
 
-    private function _getCurrentDriver(Driver $driverID): Driver {
+    private function _getCurrentDriver(int $driverID): ?Driver {
         $currDriver = null;
 
-        foreach ($drivers as $driver) {
+        foreach ($this->drivers as $driver) {
             if ($driver->getDriverID() == $driverID) {
                 $currDriver = $driver;
                 break;
@@ -77,16 +79,16 @@ class RequestHandler {
         }
         if (empty($currDriver)) {
             error_log("driver not found for id: " . $driverID);
-            return;
+            return $currDriver;
         }
 
         return $currDriver;
     }
 
-    private function _getCurrentPassenger(Passenger $passengerID): Passenger {
+    private function _getCurrentPassenger(int $passengerID): ?Passenger {
         $currPassenger = null;
 
-        foreach ($passengers as $passenger) {
+        foreach ($this->passengers as $passenger) {
             if ($passenger->getPassengerID() == $passengerID) {
                 $currPassenger = $passenger;
                 break;
@@ -94,7 +96,7 @@ class RequestHandler {
         }
         if (empty($currPassenger)) {
             error_log("passenger not found for id: " . $passengerID);
-            return;
+            return $currPassenger;
         }
 
         return $currPassenger;

@@ -1,13 +1,13 @@
 <?php
 
-require_once __DIR__ "/../ridestatus/ridestatus.php";
+require_once __DIR__ . "/../ridestatus/ridestatus.php";
 
 class Ride {
 
-    private static const int $AMOUNT_PER_KM = 20;
+    private const AMOUNT_PER_KM = 20;
 
     private int $id;
-    private Ridestatus $rideStatus;
+    private int $rideStatus;
     private int $origin;
     private int $destination;
     private int $numOfSeats;
@@ -49,7 +49,7 @@ class Ride {
     public function calculateFare(): int {
         $this->fare = (
                 ($this->destination - $this->origin) * $this->numOfSeats
-            ) * static::$AMOUNT_PER_KM;
+            ) * static::AMOUNT_PER_KM;
         return $this->fare;
     }
 

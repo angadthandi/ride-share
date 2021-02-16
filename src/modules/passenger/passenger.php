@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ "/../ride/ride.php";
-require_once __DIR__ "/../ridestatus/ridestatus.php";
+require_once __DIR__ . "/../ride/ride.php";
+require_once __DIR__ . "/../ridestatus/ridestatus.php";
 
 class Passenger {
 
